@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>WebChat - Corentin LE GUEN</title>
     <script type="text/javascript">
         window.onload = function () {
@@ -23,8 +25,8 @@
             if (window["WebSocket"]) {
                 conn = new WebSocket("ws://" + document.location.host + "/ws");
                 conn.onclose = function () {
-                    const item = document.createElement("div");
-                    item.innerHTML = "<b>Connection closed.</b>";
+                    const item = document.createElement("b");
+                    item.innerHTML = "Connection closed.";
                     appendLog(item);
                 };
                 conn.onmessage = function (evt) {
@@ -35,9 +37,14 @@
                         appendLog(item);
                     }
                 };
+                conn.onopen = function () {
+                    const item = document.createElement("b");
+                    item.innerHTML = "Connection open.";
+                    appendLog(item);
+                };
             } else {
-                const item = document.createElement("div");
-                item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+                const item = document.createElement("b");
+                item.innerHTML = "Your browser does not support WebSockets.";
                 appendLog(item);
             }
         };
@@ -46,8 +53,8 @@
 <body>
 <div id="log"></div>
 <form id="form">
+    <input type="text" id="msg" size="64"/>
     <input type="submit" value="Send"/>
-    <label for="msg">Message</label><input type="text" id="msg" size="64"/>
 </form>
 </body>
 </html>

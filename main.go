@@ -147,6 +147,7 @@ func serveWs(server *Server, w http.ResponseWriter, r *http.Request) {
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
+	log.Printf("%s joigned\t", r.RemoteAddr)
 	if r.URL.Path != "/" {
 		http.Error(w, "Not found", http.StatusNotFound)
 		return
