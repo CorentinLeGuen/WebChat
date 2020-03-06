@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebChat - Corentin LE GUEN</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            let conn;
+            const msg = document.getElementById("msg");
+            const log = document.getElementById("log");
+
+            function appendLog(item) {
+                log.appendChild(item);
+            }
+
+            document.getElementById("form").onsubmit = function () {
+                if (conn && msg.value) {
+                    conn.send(msg.value);
+                    msg.value = "";
+                }
+                return false;
+            };
+
+            if (window["WebSocket"]) {
+                conn = new WebSocket("ws://" + document.location.host + "/ws");
+                conn.onclose = function () {
+                    const item = document.createElement("div");
+                    item.innerHTML = "<b>Connection closed.</b>";
+                    appendLog(item);
+                };
+                conn.onmessage = function (evt) {
+                    const messages = evt.data.split('\n');
+                    for (let i = 0; i < messages.length; i++) {
+                        const item = document.createElement("div");
+                        item.innerText = messages[i];
+                        appendLog(item);
+                    }
+                };
+            } else {
+                const item = document.createElement("div");
+                item.innerHTML = "<b>Your browser does not support WebSockets.</b>";
+                appendLog(item);
+            }
+        };
+    </script>
+</head>
+<body>
+<div id="log"></div>
+<form id="form">
+    <input type="submit" value="Send"/>
+    <label for="msg">Message</label><input type="text" id="msg" size="64"/>
+</form>
+</body>
+</html>
